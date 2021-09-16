@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
+//import VerticalLayout from "../views/VerticalLayout"
 import { bills } from "../fixtures/bills.js"
 
 describe("Given I am connected as an employee", () => {
@@ -8,7 +9,9 @@ describe("Given I am connected as an employee", () => {
       const html = BillsUI({ data: []})
       document.body.innerHTML = html
       //to-do write expect expression
-      // A ASYNCHRONISER
+      // A ASYNCHRONISER ?
+      //expect(screen.getByTestId('icon-window')).toHaveStyle({ backgroundColor: '#7bb1f7' });
+      //expect(screen.getByTestId('layout-disconnect')).not.toHaveStyle({ backgroundColor: '#7bb1f7' });
     })
     test("Then bills should be ordered from earliest to latest", () => {
       const html = BillsUI({ data: bills })

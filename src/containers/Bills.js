@@ -56,6 +56,14 @@ export default class {
             }
           })
           .filter(bill => bill.email === userEmail)
+          
+          // ????????????
+
+          // .sort((a, b) => {
+          //   var c = new Date(a.date)
+          //   var d = new Date(b.date)
+          //   return c - d
+          // })
           console.log('length', bills.length)
         return bills
       })
