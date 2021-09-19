@@ -7,6 +7,7 @@ export default class {
     this.document = document
     this.onNavigate = onNavigate
     this.firestore = firestore
+    console.log(this.firestore);
     const buttonNewBill = document.querySelector(`button[data-testid="btn-new-bill"]`)
     if (buttonNewBill) buttonNewBill.addEventListener('click', this.handleClickNewBill)
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
@@ -41,7 +42,8 @@ export default class {
             try {
               return {
                 ...doc.data(),
-                date: formatDate(doc.data().date),
+                //date: formatDate(doc.data().date),
+                date: doc.data().date,
                 status: formatStatus(doc.data().status)
               }
             } catch(e) {
@@ -56,14 +58,8 @@ export default class {
             }
           })
           .filter(bill => bill.email === userEmail)
-          
-          // ????????????
-
-          // .sort((a, b) => {
-          //   var c = new Date(a.date)
-          //   var d = new Date(b.date)
-          //   return c - d
-          // })
+          // dates bien sorted avec suppression formatage plus haut l.45
+          .sort((a, b) => (a.date < b.date) ? 1 : -1)
           console.log('length', bills.length)
         return bills
       })

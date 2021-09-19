@@ -1,25 +1,33 @@
-import { screen } from "@testing-library/dom"
+/**
+* @jest-environment jsdom
+*/
+
+import { screen, getByTestId, getAllByText, waitFor } from "@testing-library/dom"
+import '@testing-library/jest-dom'
 import BillsUI from "../views/BillsUI.js"
-//import VerticalLayout from "../views/VerticalLayout"
+import VerticalLayout from "../views/VerticalLayout"
 import { bills } from "../fixtures/bills.js"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
-    test("Then bill icon in vertical layout should be highlighted", () => {
-      const html = BillsUI({ data: []})
+    test("Then bill icon in vertical layout should be highlighted", async () => {
+      const html = BillsUI({ data: [] })
       document.body.innerHTML = html
-      //to-do write expect expression
-      // A ASYNCHRONISER ?
-      //expect(screen.getByTestId('icon-window')).toHaveStyle({ backgroundColor: '#7bb1f7' });
-      //expect(screen.getByTestId('layout-disconnect')).not.toHaveStyle({ backgroundColor: '#7bb1f7' });
+      // to-do write expect expression
+      // Apparemment pas le bon noeud ? ( istanbul ignore next ? avec VerticalLayout ? )
+      waitFor(() => {
+        expect(getByTestId(document.body, 'icon-window')).toHaveStyle({ backgroundColor: "#7bb1f7" });
+      })
     })
-    test("Then bills should be ordered from earliest to latest", () => {
+    test("Then bills should be ordered from earliest to latest", async () => {
       const html = BillsUI({ data: bills })
       document.body.innerHTML = html
-      const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
+      const dates = screen.getAllByText(/^(19|20)\d\d[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
       const antiChrono = (a, b) => ((a < b) ? 1 : -1)
       const datesSorted = [...dates].sort(antiChrono)
-      expect(dates).toEqual(datesSorted)
+      waitFor(() => { 
+        expect(dates).toEqual(datesSorted)
+      })
     })
   })
 })

@@ -24,7 +24,7 @@ export default class Login {
     }
     this.localStorage.setItem("user", JSON.stringify(user))
     const userExists = this.checkIfUserExists(user)
-    if (!userExists) this.createUser(user)
+    //if (!userExists) this.createUser(user) >>> déplacé l.64
     e.preventDefault()
     this.onNavigate(ROUTES_PATH['Bills'])
     this.PREVIOUS_LOCATION = ROUTES_PATH['Bills']
@@ -61,7 +61,7 @@ export default class Login {
           console.log(`User with ${user.email} exists`)
           return true
         } else {
-          return false
+          this.createUser(user)
         }
       })
       .catch(error => error)
