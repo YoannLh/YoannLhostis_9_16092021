@@ -10,11 +10,16 @@ import { bills } from "../fixtures/bills.js"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
-    test("Then bill icon in vertical layout should be highlighted", async () => {
-      const html = BillsUI({ data: [] })
+    test("Then the page should not be Error Page", async () => {
+      const html = BillsUI({ data: bills, loading: true, error: "" })
       document.body.innerHTML = html
-      // to-do write expect expression
-      // Apparemment pas le bon noeud ? ( istanbul ignore next ? avec VerticalLayout ? )
+      waitFor(() => {
+        expect(getByTestId(document.body, 'btn-new-bill')).toBeTruthy();
+      })
+    })
+    test("Then bill icon in vertical layout should be highlighted", async () => {
+      const html = BillsUI({ data: bills })
+      document.body.innerHTML = html
       waitFor(() => {
         expect(getByTestId(document.body, 'icon-window')).toHaveStyle({ backgroundColor: "#7bb1f7" });
       })
@@ -30,4 +35,12 @@ describe("Given I am connected as an employee", () => {
       })
     })
   })
+  describe("When there is a problem with data", () => {
+    test("Then the page should be Error Page", () => {
+      const html = BillsUI({ data: bills, loading: false, error: "error" })
+      document.body.innerHTML = html
+      expect(getByTestId(document.body, 'error-message')).toBeTruthy();
+    })
+  })
 })
+
