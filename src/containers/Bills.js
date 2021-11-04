@@ -22,45 +22,34 @@ export default class {
   }
 
   handleClickIconEye = (icon) => {
+    console.log("! click on eye !");
     const billUrl = icon.getAttribute("data-bill-url")
     const imgWidth = Math.floor($('#modaleFile').width() * 0.5)
     $('#modaleFile').find(".modal-body").html(`<div style='text-align: center;'><img width=${imgWidth} src=${billUrl} /></div>`)
-    $('#modaleFile').modal('show')
+    if (typeof $("#modaleFile").modal === "function") $('#modaleFile').modal('show')
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   getBills = () => {
     const userEmail = localStorage.getItem('user') ?
       JSON.parse(localStorage.getItem('user')).email : ""
+      console.log(userEmail)
     if (this.firestore) {
       return this.firestore
       .bills()
       .get()
       .then(snapshot => {
         const bills = snapshot.docs
-          .map(doc => {
-            try {
-              return {
-                ...doc.data(),
-                //date: formatDate(doc.data().date),
-                date: doc.data().date,
-                status: formatStatus(doc.data().status)
-              }
-            } catch(e) {
-              // if for some reason, corrupted data was introduced, we manage here failing formatDate function
-              // log the error and return unformatted date in that case
-              console.log(e,'for',doc.data())
-              return {
-                ...doc.data(),
-                date: doc.data().date,
-                status: formatStatus(doc.data().status)
-              }
-            }
-          })
+          .map(doc => ({
+            ...doc.data(),
+            status: formatStatus(doc.data().status)
+          }))
           .filter(bill => bill.email === userEmail)
-          // dates bien sorted avec suppression formatage plus haut l.45
           .sort((a, b) => (a.date < b.date) ? 1 : -1)
+          .map(bill => ({ ...bill, date : formatDate(bill.date) }))
           console.log('length', bills.length)
+          console.log("bills : ", bills);
         return bills
       })
       .catch(error => error)
