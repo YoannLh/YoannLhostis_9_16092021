@@ -128,7 +128,7 @@ describe("Test features on Bills", () => {
 
     const html = BillsUI({ data: bills });
     document.body.innerHTML = html;
-    
+
     const onNavigate = (pathname) => {
       document.body.innerHTML = ROUTES({ pathname });
     };
@@ -141,15 +141,17 @@ describe("Test features on Bills", () => {
     });
 
     $.fn.modal = jest.fn();
-    const eye = screen.getAllByTestId("icon-eye")[0];
-    const handleClickIconEye = jest.fn(() =>
-      allBills.handleClickIconEye(eye)
-    );
-    eye.addEventListener("click", handleClickIconEye);
-    fireEvent.click(eye);
-    expect(handleClickIconEye).toHaveBeenCalled();
-    const modale = document.getElementById("modaleFile");
-    expect(modale).toBeTruthy();
+    const eyes = screen.getAllByTestId("icon-eye");
+    for(const eye of eyes) {
+      const handleClickIconEye = jest.fn(() =>
+        allBills.handleClickIconEye(eye)
+      );
+      eye.addEventListener("click", handleClickIconEye);
+      fireEvent.click(eye);
+      expect(handleClickIconEye).toHaveBeenCalled();
+      const modale = document.getElementById("modaleFile");
+      expect(modale).toBeTruthy();
+    }
   });
 })
 

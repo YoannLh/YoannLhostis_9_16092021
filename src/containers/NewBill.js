@@ -20,7 +20,7 @@ export default class NewBill {
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     this.firestore
-      .storage
+      .storage()
       .ref(`justificatifs/${fileName}`)
       .put(file)
       .then(snapshot => snapshot.ref.getDownloadURL())
