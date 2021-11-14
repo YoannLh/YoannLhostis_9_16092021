@@ -19,8 +19,8 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
-    this.firestore
-      .storage
+    if(this.firestore) {
+      this.firestore.storage
       .ref(`justificatifs/${fileName}`)
       .put(file)
       .then(snapshot => snapshot.ref.getDownloadURL())
@@ -28,6 +28,8 @@ export default class NewBill {
         this.fileUrl = url
         this.fileName = fileName
       })
+      console.log("this.firestore.storage : ", this.firestore.storage)
+    }
   }
   handleSubmit = e => {
     e.preventDefault()

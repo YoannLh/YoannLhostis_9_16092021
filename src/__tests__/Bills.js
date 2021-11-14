@@ -128,7 +128,7 @@ describe("Test features on Bills", () => {
 
     const html = BillsUI({ data: bills });
     document.body.innerHTML = html;
-    
+
     const onNavigate = (pathname) => {
       document.body.innerHTML = ROUTES({ pathname });
     };
@@ -141,20 +141,22 @@ describe("Test features on Bills", () => {
     });
 
     $.fn.modal = jest.fn();
-    const eye = screen.getAllByTestId("icon-eye")[0];
-    const handleClickIconEye = jest.fn(() =>
-      allBills.handleClickIconEye(eye)
-    );
-    eye.addEventListener("click", handleClickIconEye);
-    fireEvent.click(eye);
-    expect(handleClickIconEye).toHaveBeenCalled();
-    const modale = document.getElementById("modaleFile");
-    expect(modale).toBeTruthy();
+    const eyes = screen.getAllByTestId("icon-eye");
+    for(const eye of eyes) {
+      const handleClickIconEye = jest.fn(() =>
+        allBills.handleClickIconEye(eye)
+      );
+      eye.addEventListener("click", handleClickIconEye);
+      fireEvent.click(eye);
+      expect(handleClickIconEye).toHaveBeenCalled();
+      const modale = document.getElementById("modaleFile");
+      expect(modale).toBeTruthy();
+    }
   });
 })
 
 // test d'intégration GET
-describe("Given I am a user connected as Employee", () => {
+describe("Given I am connected as Employee", () => {
   describe("When I navigate to Bills UI", () => {
     test("fetches bills from mock API GET", async () => {
       const getSpy = jest.spyOn(firebase, "get");

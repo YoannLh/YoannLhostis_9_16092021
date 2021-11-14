@@ -17,16 +17,16 @@ export default class {
     new Logout({ document, localStorage, onNavigate })
   }
 
-  handleClickNewBill = e => {
-    this.onNavigate(ROUTES_PATH['NewBill'])
-  }
-
   handleClickIconEye = (icon) => {
     console.log("! click on eye !");
     const billUrl = icon.getAttribute("data-bill-url")
     const imgWidth = Math.floor($('#modaleFile').width() * 0.5)
     $('#modaleFile').find(".modal-body").html(`<div style='text-align: center;'><img width=${imgWidth} src=${billUrl} /></div>`)
     if (typeof $("#modaleFile").modal === "function") $('#modaleFile').modal('show')
+  }
+
+  handleClickNewBill = e => {
+    this.onNavigate(ROUTES_PATH['NewBill'])
   }
 
   // not need to cover this function by tests

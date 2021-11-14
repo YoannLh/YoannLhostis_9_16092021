@@ -9,6 +9,7 @@ import NewBill from "../containers/NewBill.js"
 import { readyException } from "jquery"
 import { data } from "../__mocks__/firebase"
 import firebase from "../__mocks__/firebase"
+import firestore from "../app/Firestore";
 import { ROUTES } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 
@@ -31,12 +32,137 @@ describe("Given I am connected as an employee", () => {
   })
 })
 describe("When I am on NewBill and editing a new bill", () => {
-  test("Then format of file should be .jpg, jpeg ou .png", () => {
+  test("A file is choosen", () => {
+
+    const onNavigate = (pathname) => {
+      document.body.innerHTML = ROUTES({ pathname });
+    };
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
+    });
+    window.localStorage.setItem(
+      "user",
+      JSON.stringify({
+        type: "Employee",
+      })
+    );
+
     const html = NewBillUI();
     document.body.innerHTML = html;
-    
-    expect(getByTestId(document.body, 'file')).toMatch(/.jpg$|.jpeg$|.png$|/);
+
+    const newBill = new NewBill({
+      document,
+      onNavigate,
+      firestore : null,
+      localStorage: window.localStorage
+    });
+
+    const handleChangeFile = jest.fn(newBill.handleChangeFile);
+    const inputFile = screen.getByTestId("file");
+    inputFile.addEventListener("change", handleChangeFile);
+    fireEvent.change(inputFile, {
+      target: {
+        files: [new File(["image.png"], "image.png", { type: "image/png" })],
+      },
+    });
+
+    expect(handleChangeFile).toHaveBeenCalled();
+    expect(inputFile.files[0].name).toBe("image.png");
+  });
+  test("Then format of file should be .jpg, .jpeg ou .png", () => {
+    const onNavigate = (pathname) => {
+      document.body.innerHTML = ROUTES({ pathname });
+    };
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
+    });
+    window.localStorage.setItem(
+      "user",
+      JSON.stringify({
+        type: "Employee",
+      })
+    );
+
+    const html = NewBillUI();
+    document.body.innerHTML = html;
+
+    const newBill = new NewBill({
+      document,
+      onNavigate,
+      firestore : null,
+      localStorage: window.localStorage
+    });
+
+    const handleChangeFile = jest.fn(newBill.handleChangeFile);
+    const inputFile = screen.getByTestId("file");
+    inputFile.addEventListener("change", handleChangeFile);
+    fireEvent.change(inputFile, {
+      target: {
+        files: [new File(["image.png"], "image.png", { type: "image/png" })],
+      },
+    });
+
+    expect(inputFile.files[0].name).toMatch(/\.png/);
+
+    fireEvent.change(inputFile, {
+      target: {
+        files: [new File(["image.jpg"], "image.jpg", { type: "image/jpg" })],
+      },
+    });
+
+    expect(inputFile.files[0].name).toMatch(/\.jpg/);
+
+    fireEvent.change(inputFile, {
+      target: {
+        files: [new File(["image.jpeg"], "image.jpeg", { type: "image/jpeg" })],
+      },
+    });
+
+    expect(inputFile.files[0].name).toMatch(/\.jpeg/);
+
+    fireEvent.change(inputFile, {
+      target: {
+        files: [new File(["image.pdf"], "image.pdf", { type: "image/pdf" })],
+      },
+    });
+
+    expect(inputFile.files[0].name).not.toMatch(/\.png/);
+    expect(inputFile.files[0].name).not.toMatch(/\.jpg/);
+    expect(inputFile.files[0].name).not.toMatch(/\.jpeg/);
   })
+})
+describe("When I am on NewBill and submit a new bill", () => {
+  test("the new bill is submitted when i click submit button", () => {
+
+    const onNavigate = (pathname) => {
+      document.body.innerHTML = ROUTES({ pathname });
+    };
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
+    });
+    window.localStorage.setItem(
+      "user",
+      JSON.stringify({
+        type: "Employee",
+      })
+    );
+
+    const html = NewBillUI();
+    document.body.innerHTML = html;
+
+    const newBill = new NewBill({
+      document,
+      onNavigate,
+      firestore : null,
+      localStorage: window.localStorage
+    });
+
+    const handleSubmit = jest.fn(newBill.handleSubmit);
+    const buttonSubmit = screen.getByTestId("form-new-bill");
+    buttonSubmit.addEventListener("submit", handleSubmit);
+    fireEvent.submit(buttonSubmit);
+    expect(handleSubmit).toHaveBeenCalled();
+  });
 })
 
 // Test d'intégration POST:
