@@ -53,8 +53,13 @@ describe("When I am on NewBill and editing a new bill", () => {
     const newBill = new NewBill({
       document,
       onNavigate,
+<<<<<<< HEAD
       firestore : null,
       localStorage: window.localStorage
+=======
+      firestore: null,
+      localStorage: window.localStorage,
+>>>>>>> main
     });
 
     const handleChangeFile = jest.fn(newBill.handleChangeFile);
@@ -70,6 +75,7 @@ describe("When I am on NewBill and editing a new bill", () => {
     expect(inputFile.files[0].name).toBe("image.png");
   });
   test("Then format of file should be .jpg, .jpeg ou .png", () => {
+<<<<<<< HEAD
     const onNavigate = (pathname) => {
       document.body.innerHTML = ROUTES({ pathname });
     };
@@ -129,6 +135,11 @@ describe("When I am on NewBill and editing a new bill", () => {
     expect(inputFile.files[0].name).not.toMatch(/\.png/);
     expect(inputFile.files[0].name).not.toMatch(/\.jpg/);
     expect(inputFile.files[0].name).not.toMatch(/\.jpeg/);
+=======
+    const html = NewBillUI();
+    document.body.innerHTML = html;
+    expect(getByTestId(document.body, 'file')).toMatch(/.jpg$|.jpeg$|.png$|/);
+>>>>>>> main
   })
 })
 describe("When I am on NewBill and submit a new bill", () => {

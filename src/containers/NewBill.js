@@ -19,8 +19,13 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+<<<<<<< HEAD
     if(this.firestore) {
       this.firestore.storage
+=======
+    this.firestore
+      .storage()
+>>>>>>> main
       .ref(`justificatifs/${fileName}`)
       .put(file)
       .then(snapshot => snapshot.ref.getDownloadURL())
